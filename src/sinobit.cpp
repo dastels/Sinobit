@@ -68,8 +68,8 @@ void Sinobit::drawPixel(int16_t x, int16_t y, uint16_t color) {
   else      leds.clrPixel(i);
 }
 
-boolean Sinobit::begin(uint8_t type) {
-  leds.begin(type);
+boolean Sinobit::begin() {
+  leds.begin(ADA_HT1632_COMMON_16NMOS);
   return true;
 }
 

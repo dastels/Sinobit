@@ -19,7 +19,7 @@ class Sinobit : public Adafruit_GFX {
 
  public:
    Sinobit();
-   boolean begin(uint8_t type);
+   boolean begin();
    void clearScreen(void);
    void fillScreen(void);
    void blink(boolean b);
