@@ -1,20 +1,14 @@
-const int io_0 = 0;
-const int io_1 = 1;
-const int io_2 = 2;
-const int io_3 = 3;
-const int io_4 = 4;
-const int io_5 = 10;
+#include <sinobit.h>
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(io_0, OUTPUT);
-  pinMode(io_1, OUTPUT);
-  pinMode(io_2, OUTPUT);
-  pinMode(io_3, OUTPUT);
-  pinMode(io_4, OUTPUT);
-  pinMode(io_5, OUTPUT);
+  pinMode(SINOBIT_PAD_P0, OUTPUT);
+  pinMode(SINOBIT_PAD_P1, OUTPUT);
+  pinMode(SINOBIT_PAD_P2, OUTPUT);
+  pinMode(SINOBIT_PAD_P3, OUTPUT);
+  pinMode(SINOBIT_PAD_P4, OUTPUT);
+  pinMode(SINOBIT_PAD_P5, OUTPUT);
 }
-
 
 void pulse(int io_pin, int count)
 {
@@ -26,12 +20,11 @@ void pulse(int io_pin, int count)
   }
 }
 
-
 void loop() {
-  pulse(io_0, 1);
-  pulse(io_1, 1);
-  pulse(io_2, 1);
-  pulse(io_3, 1);
-  pulse(io_4, 1);
-  pulse(io_5, 1);
+  pulse(SINOBIT_PAD_P0, 1);
+  pulse(SINOBIT_PAD_P1, 1);
+  pulse(SINOBIT_PAD_P2, 1);
+  pulse(SINOBIT_PAD_P3, 1);
+  pulse(SINOBIT_PAD_P4, 1);
+  pulse(SINOBIT_PAD_P5, 1);
 }
