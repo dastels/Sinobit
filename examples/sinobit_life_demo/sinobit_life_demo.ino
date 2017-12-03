@@ -106,11 +106,8 @@ void updateDisplay() {
 
 void setup() {
   matrix.begin();
-  delay(100);
-  matrix.fillScreen();
   delay(500);
   matrix.clearScreen();
-  matrix.setTextWrap(false);
 
   lifeSetup();
 }
