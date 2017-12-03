@@ -1,3 +1,9 @@
+// Play Conway's game of life on the LED matrix.
+// Based on code by Phillip Burgess in https://learn.adafruit.com/mini-commodore-pet-with-charlieplexed-led-matrix/software
+
+// Copyright (c) Dave Astels. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 #include <sinobit.h>
 
 Sinobit matrix = Sinobit();

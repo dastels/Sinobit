@@ -1,3 +1,8 @@
+// Dispaly arrow shapes on the LED matrix in response to button presses.
+
+// Copyright (c) Dave Astels. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 #include <sinobit.h>
 
 Sinobit matrix = Sinobit();

@@ -1,3 +1,8 @@
+// Blink the top-left LED in the matrix.
+
+// Copyright (c) Dave Astels. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 #include <sinobit.h>
 
 Sinobit matrix = Sinobit();
