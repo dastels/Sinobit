@@ -3,6 +3,6 @@ This is a support library for the Sino:bit, the BBC Micro:bit inspired board des
 Written by Dave Astels for Adafruit Industries. MIT license, check LICENSE for more information.
 All text above must be included in any redistribution.
 
-Place the Sinobit library folder your arduinosketchfolder/libraries/ folder. You may need to create the libraries subfolder if its your first library. Restart the IDE.
+Recent Arduino IDE releases include the Library Manager for easy installation. Otherwise, to download, click the DOWNLOAD ZIP button, uncompress and rename the uncompressed folder Sinobit. Confirm that the Sinobit folder contains src and examples folders. Place the Sinobit library folder your /Libraries/ folder. You may need to create the Libraries subfolder if its your first library. Restart the IDE.
 
 Also requires the Adafruit_GFX (https://github.com/adafruit/Adafruit-GFX-Library) and HT1632 (https://github.com/adafruit/HT1632) libraries for Arduino.
