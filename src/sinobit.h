@@ -31,7 +31,7 @@
 #define SINOBIT_P16 (16)
 /* #define SINOBIT_P17 (17) */
 /* #define SINOBIT_P18 (18) */
-/* #define SINOBIT_P19 (19) */
+#define SINOBIT_P19 (19)
 #define SINOBIT_P20 (20)
 
 #define SINOBIT_BUTTON_A (5)
