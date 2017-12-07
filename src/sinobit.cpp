@@ -1,8 +1,44 @@
 #include "sinobit.h"
+#include "scroll_support.h"
+
+
+#ifndef pgm_read_byte
+ #define pgm_read_byte(addr) (*(const unsigned char *)(addr))
+#endif
+#ifndef pgm_read_word
+ #define pgm_read_word(addr) (*(const unsigned short *)(addr))
+#endif
+#ifndef pgm_read_dword
+ #define pgm_read_dword(addr) (*(const unsigned long *)(addr))
+#endif
+
+// Pointers are a peculiar case...typically 16-bit on AVR boards,
+// 32 bits elsewhere.  Try to accommodate both...
+
+#if !defined(__INT_MAX__) || (__INT_MAX__ > 0xFFFF)
+ #define pgm_read_pointer(addr) ((void *)pgm_read_dword(addr))
+#else
+ #define pgm_read_pointer(addr) ((void *)pgm_read_word(addr))
+#endif
+
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
 
 #ifndef _swap_int16_t
 #define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
 #endif
+
+Sinobit_HT1632::Sinobit_HT1632(int8_t data, int8_t wr, int8_t cs, int8_t rd)
+  : Adafruit_HT1632(data, wr, cs, rd)
+{
+}
+
+void Sinobit_HT1632::blankScreen()
+{
+    memset(ledmatrix, 0, sizeof(ledmatrix));
+}
+
 
 Sinobit::Sinobit() : Adafruit_GFX(12, 12), leds(15, 13, 16) {}
 
@@ -92,3 +128,75 @@ void Sinobit::blink(boolean b) {
 void Sinobit::writeScreen() {
   leds.writeScreen();
 }
+
+void Sinobit::setReadingDirection(readingDirection_t dir)
+{
+  reading_direction = dir;
+}
+
+
+// Retrieve a character's bounds
+// returns true if spicified char as a glyph
+
+int8_t Sinobit::characterAdvance(char c, ScrollSupport *scroller)
+{
+  if(gfxFont) {
+  	if(c != '\n' && c != '\r') { // Not a carriage return; is normal char
+  	  uint8_t first = pgm_read_byte(&gfxFont->first);
+  	  uint8_t last  = pgm_read_byte(&gfxFont->last);
+  	  if((c >= first) && (c <= last)) { // Char present in this font?
+  		GFXglyph *glyph = &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c - first]);
+  		return scroller->selectAdvance(textsize * pgm_read_byte(&glyph->xAdvance),
+									   textsize * pgm_read_byte(&glyph->height) + 1);
+  	  } else {
+  		return 0;
+  	  }
+  	}
+	
+  } else { // Default font
+	
+  	if(c != '\n' && c != '\r') {  // Normal char; ignore carriage returns
+  	  return textsize * 8;
+  	}
+  	return true;
+  }
+}
+
+
+// print a string using the set reading direction
+
+void Sinobit::printDirectionally(String message, ScrollSupport *scroller)
+{
+  const char *buffer = message.c_str();
+  size_t size = message.length();
+  int16_t x = cursor_x;
+  int16_t y = cursor_y;
+  while (size--) {
+	drawChar(x, y, *buffer, 1, 0, 1);
+	int8_t advance = characterAdvance(*buffer, scroller);
+	x = scroller->nextCharacterX(x, advance);
+	y = scroller->nextCharacterY(y, advance);
+	buffer++;
+  }
+}
+
+
+// scroll a string onto the LED array based on the reading direction that's set
+
+void Sinobit::scroll(String message, uint16_t interstitialDelay)
+{
+  ScrollSupport *scroller = new ScrollUp(message);
+  
+  int16_t x = scroller->initialX();
+  int16_t y = scroller->initialY();
+  while (!scroller->isFinished(x, y)) {
+    setCursor(x, y);
+    blankScreen();
+    printDirectionally(message, scroller);
+    writeScreen();
+	x = scroller->nextX(x);
+	y = scroller->nextY(y);
+    delay(interstitialDelay);
+  }
+  delete scroller;
+}  
