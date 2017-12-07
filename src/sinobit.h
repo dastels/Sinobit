@@ -38,14 +38,6 @@
 #define SINOBIT_BUTTON_A (5)
 #define SINOBIT_BUTTON_B (11)
 
-typedef enum {
-  TopToBottom,
-  BottomToTop,
-  LeftToRight,
-  RightToLeft
-} readingDirection_t;
-
-
 class Sinobit_HT1632 : public Adafruit_HT1632
 {
  public:

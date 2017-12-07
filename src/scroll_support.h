@@ -3,6 +3,15 @@
 
 #include <Arduino.h>
 
+
+typedef enum {
+  TopToBottom,
+  BottomToTop,
+  LeftToRight,
+  RightToLeft
+} readingDirection_t;
+
+
 class ScrollSupport
 {
  public: 
