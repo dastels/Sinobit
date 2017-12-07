@@ -14,7 +14,8 @@ typedef enum {
 
 class ScrollSupport
 {
- public: 
+ public:
+  static ScrollSupport *makeFor(readingDirection_t dir, String message);
   ScrollSupport(String aMessage);
   virtual int16_t initialX() = 0;
   virtual int16_t initialY(int8_t h) = 0;
