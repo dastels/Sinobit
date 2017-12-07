@@ -60,15 +60,18 @@ boolean Sinobit::translate(int16_t x, int16_t y, int16_t *x_out, int16_t *y_out)
   return true;
 }
 
-void Sinobit::setPixel(uint8_t x, uint8_t y) {
+void Sinobit::setPixel(uint8_t x, uint8_t y)
+{
   drawPixel(x, y, 1);
 }
 
-void Sinobit::clrPixel(uint8_t x, uint8_t y) {
+void Sinobit::clrPixel(uint8_t x, uint8_t y)
+{
   drawPixel(x, y, 0);
 }
 
-void Sinobit::drawPixel(int16_t x, int16_t y, uint16_t color) {
+void Sinobit::drawPixel(int16_t x, int16_t y, uint16_t color)
+{
   if((x < 0) || (x >= _width) || (y < 0) || (y >= _height)) return;
 
   switch(rotation) { // Rotate pixel into device-specific coordinates
@@ -104,28 +107,39 @@ void Sinobit::drawPixel(int16_t x, int16_t y, uint16_t color) {
   else      leds.clrPixel(i);
 }
 
-boolean Sinobit::begin() {
+boolean Sinobit::begin()
+{
   leds.begin(ADA_HT1632_COMMON_16NMOS);
   return true;
 }
 
-void Sinobit::clearScreen() {
+void Sinobit::clearScreen()
+{
   leds.clearScreen();
 }
 
-void Sinobit::fillScreen() {
+void Sinobit::blankScreen()
+{
+  leds.blankScreen();
+}
+
+void Sinobit::fillScreen()
+{
   leds.fillScreen();
 }
 
-void Sinobit::setBrightness(uint8_t b) {
+void Sinobit::setBrightness(uint8_t b)
+{
   leds.setBrightness(b);
 }
 
-void Sinobit::blink(boolean b) {
+void Sinobit::blink(boolean b)
+{
   leds.blink(b);
 }
 
-void Sinobit::writeScreen() {
+void Sinobit::writeScreen()
+{
   leds.writeScreen();
 }
 
