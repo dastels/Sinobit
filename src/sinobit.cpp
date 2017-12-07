@@ -176,6 +176,15 @@ int8_t Sinobit::characterAdvance(char c, ScrollSupport *scroller)
   }
 }
 
+int8_t Sinobit::fontHeight()
+{
+  if (gfxFont) {
+	return pgm_read_byte(&gfxFont->yAdvance);
+  } else {
+	return 8;
+  }
+}
+
 
 // print a string using the set reading direction
 
@@ -199,10 +208,10 @@ void Sinobit::printDirectionally(String message, ScrollSupport *scroller)
 
 void Sinobit::scroll(String message, uint16_t interstitialDelay)
 {
-  ScrollSupport *scroller = new ScrollUp(message);
-  
+  ScrollSupport *scroller = ScrollSupport::makeFor(reading_direction, message);
+  int8_t h = fontHeight();
   int16_t x = scroller->initialX();
-  int16_t y = scroller->initialY();
+  int16_t y = scroller->initialY(gfxFont ? h : -h);
   while (!scroller->isFinished(x, y)) {
     setCursor(x, y);
     blankScreen();
