@@ -67,6 +67,7 @@ class Sinobit : public Adafruit_GFX
    boolean translate(int16_t x, int16_t y, int16_t *x_out, int16_t *y_out);
    int8_t characterAdvance(char c, ScrollSupport *scroller);
    int8_t fontHeight();
+   int8_t fontWidth();
    void printDirectionally(String message, ScrollSupport *scroller);
    Sinobit_HT1632 leds;
    readingDirection_t reading_direction;

@@ -25,6 +25,10 @@
 #define min(a,b) (((a) < (b)) ? (a) : (b))
 #endif
 
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #ifndef _swap_int16_t
 #define _swap_int16_t(a, b) { int16_t t = a; a = b; b = t; }
 #endif
@@ -155,13 +159,13 @@ void Sinobit::setReadingDirection(readingDirection_t dir)
 int8_t Sinobit::characterAdvance(char c, ScrollSupport *scroller)
 {
   if(gfxFont) {
-  	if(c != '\n' && c != '\r') { // Not a carriage return; is normal char
+  	if (c != '\n' && c != '\r') { // Not a carriage return; is normal char
   	  uint8_t first = pgm_read_byte(&gfxFont->first);
   	  uint8_t last  = pgm_read_byte(&gfxFont->last);
   	  if((c >= first) && (c <= last)) { // Char present in this font?
   		GFXglyph *glyph = &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c - first]);
-  		return scroller->selectAdvance(textsize * pgm_read_byte(&glyph->xAdvance),
-									   textsize * pgm_read_byte(&glyph->height) + 1);
+  		return scroller->selectAdvance(pgm_read_byte(&glyph->xAdvance),
+									   pgm_read_byte(&glyph->height) + 1);
   	  } else {
   		return 0;
   	  }
@@ -170,7 +174,7 @@ int8_t Sinobit::characterAdvance(char c, ScrollSupport *scroller)
   } else { // Default font
 	
   	if(c != '\n' && c != '\r') {  // Normal char; ignore carriage returns
-  	  return textsize * 8;
+  	  return scroller->selectAdvance(7,8);
   	}
   	return true;
   }
@@ -182,6 +186,28 @@ int8_t Sinobit::fontHeight()
 	return pgm_read_byte(&gfxFont->yAdvance);
   } else {
 	return 8;
+  }
+}
+
+
+int8_t Sinobit::fontWidth()
+{
+  if (gfxFont) {
+	uint8_t first = pgm_read_byte(&gfxFont->first);
+	uint8_t last  = pgm_read_byte(&gfxFont->last);
+	uint8_t w = 0;
+	for (int c = first; c <= last; c++) {
+	  if (c != '\n' && c != '\r') {
+		GFXglyph *glyph = &(((GFXglyph *)pgm_read_pointer(&gfxFont->glyph))[c]);
+		int8_t glyph_width = pgm_read_byte(&glyph->xAdvance);
+		if (glyph_width <= 12) {
+		  w = max(w, glyph_width);
+		}
+	  }
+	}
+	return w;
+  } else {
+	return 7;
   }
 }
 
@@ -210,9 +236,10 @@ void Sinobit::scroll(String message, uint16_t interstitialDelay)
 {
   ScrollSupport *scroller = ScrollSupport::makeFor(reading_direction, message);
   int8_t h = fontHeight();
-  int16_t x = scroller->initialX();
+  int8_t w = fontWidth();
+  int16_t x = scroller->initialX(w);
   int16_t y = scroller->initialY(gfxFont ? h : -h);
-  while (!scroller->isFinished(x, y)) {
+  while (!scroller->isFinished(x, y, w, h)) {
     setCursor(x, y);
     blankScreen();
     printDirectionally(message, scroller);

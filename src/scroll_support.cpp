@@ -6,6 +6,7 @@ ScrollSupport *ScrollSupport::makeFor(readingDirection_t dir, String message)
   switch (dir) {
   case TopToBottom: return new ScrollUp(message);
   case LeftToRight: return new ScrollLeft(message);
+  case RightToLeft: return new ScrollRight(message);
   }
 }
 
@@ -17,6 +18,11 @@ ScrollSupport::ScrollSupport(String aMessage)
 
 
 ScrollLeft::ScrollLeft(String aMessage) : ScrollSupport(aMessage)
+{
+}
+
+
+ScrollRight::ScrollRight(String aMessage) : ScrollSupport(aMessage)
 {
 }
 
